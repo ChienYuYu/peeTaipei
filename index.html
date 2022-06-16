@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,10 +8,34 @@
   <title>Pee Taipei 台北尿尿網</title>
   <link rel="stylesheet" href="./stylesheets/all.css">
 </head>
+
 <body>
+  <div id="app">
+
+
+    <header class="header">
+      <nav class="navbar bg-dark bg-opacity-75 justify-content-center">
+        <h1 class="navbar-brand mb-0 text-white">PeeTaipei<span class="fs-6"> 台北尿尿網</span></h1>
+      </nav>
+      <!-- <img src="img/waterfalls-g644417a66_1920.jpg" class="banner-img"> -->
+      <div class="container h-75 d-flex  align-items-center">
+        <input class="form-control search-bar mx-auto w-75 bg-light text-dark shadow-lg" type="search" placeholder="請輸入區或路名尋找附近的廁所" aria-label="Search">
+      </div>
+    </header>
+  </div>
 
 
   <script src="https://unpkg.com/vue@next"></script>
-  
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {}
+      },
+      methods: {},
+      creatde() { },
+      computed: {}
+    })
+  </script>
 </body>
+
 </html>
