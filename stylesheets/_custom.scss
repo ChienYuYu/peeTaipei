@@ -9,8 +9,11 @@
   background-image: url('../img/waterfalls-g644417a66_1920.jpg');
   background-position: center center;
   background-size: cover;
-  height: 300px;
+  height: 250px;
+  @include media-breakpoint-up(sm) { 
+    height: 500px;
+  }
 }
-.search-bar{
-  
+.footer .fz-14{
+  font-size: 14px;
 }

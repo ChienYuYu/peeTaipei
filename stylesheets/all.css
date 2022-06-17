@@ -10820,6 +10820,16 @@ fieldset:disabled .btn {
   background-image: url("../img/waterfalls-g644417a66_1920.jpg");
   background-position: center center;
   background-size: cover;
-  height: 300px;
+  height: 250px;
+}
+
+@media (min-width: 576px) {
+  .header {
+    height: 500px;
+  }
+}
+
+.footer .fz-14 {
+  font-size: 14px;
 }
 /*# sourceMappingURL=all.css.map */

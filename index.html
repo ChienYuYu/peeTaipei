@@ -11,30 +11,113 @@
 
 <body>
   <div id="app">
-
-
     <header class="header">
       <nav class="navbar bg-dark bg-opacity-75 justify-content-center">
         <h1 class="navbar-brand mb-0 text-white">PeeTaipei<span class="fs-6"> 台北尿尿網</span></h1>
       </nav>
-      <!-- <img src="img/waterfalls-g644417a66_1920.jpg" class="banner-img"> -->
+      
       <div class="container h-75 d-flex  align-items-center">
         <input class="form-control search-bar mx-auto w-75 bg-light text-dark shadow-lg" type="search" placeholder="請輸入區或路名尋找附近的廁所" aria-label="Search">
       </div>
     </header>
+    
+    <div class="row">
+      <div class="col-12 col-md-4 col-lg-3 bg-light" v-for="(item,index) in showData" :key="index">
+        <div class="card m-4">
+          <div class="card-header bg-dark">
+            <p class="mb-0 text-white">【{{index+1}}】 公廁名稱 : <span class="text-warning">{{item.公廁名稱}}</span></p>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">地址: {{item.公廁地址}}</h6>
+            <a href="https://www.google.com.tw/maps/place/item.緯度+item.經度" class="btn btn-warning d-block">地圖開關</a>
+            <!-- <iframe width="100%" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
+                :src=`https://maps.google.com.tw/maps?f=q&hl=zh-TW&geocode=&q=${item.緯度},${item.經度}&z=16&output=embed`></iframe> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center align-items-center my-4">
+      <button type="button" class="btn btn-outline-dark mx-2" @click="previousPage">
+        前一頁
+      </button>
+
+      <p class="mb-0">目前第{{currentPage}}頁 / 共{{totalPage}}頁</p>
+      <!-- <p>{{test}}{{currentPage}}{{totalPage}}</p> -->
+
+      <button type="button" class="btn btn-outline-dark mx-2" @click="nextPage">
+        下一頁
+      </button>
+    </div>
+    <footer class="footer bg-dark text-secondary text-center py-3">PeeTaipei 關心您尿尿的地方<br><span class="fz-14">Copyright&copy2022 Chen ChienYu</span></footer>
   </div>
-
-
+  <!-- https://www.google.com.tw/maps/place/25%C2%B005'25.7%22N+121%C2%B030'22.2%22E -->
+  <!-- https://www.google.com.tw/maps/place/25%C2%B005'25.7%22N+121%C2%B030'22.2%22E -->
+  <!-- https://www.google.com.tw/maps/place/25%C2%B005'25.7%22N+121%C2%B030'22.2%22E -->
+  <!-- https://www.google.com.tw/maps/place/25.090457N+121.506159E -->
+  <!-- https://www.google.com.tw/maps/place/{{25.090457N}}+{{121.506159}} -->
   <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
     const app = Vue.createApp({
-      data() {
-        return {}
+      data(){
+        return {
+          // apiUrl:'https://quality.data.gov.tw/dq_download_json.php?nid=138798&md5_url=64e392a0fcb63fa9fb1f596bcb86e96b',
+          apiUrl:'./64e392a0fcb63fa9fb1f596bcb86e96b_export.json',
+          apiData:[],
+          test:123,
+          totalPage:0,//總頁數
+          prePageData:[],//每頁資料
+          currentPage:1,//當前頁面
+        }
       },
-      methods: {},
-      creatde() { },
-      computed: {}
+      methods: {
+        // api--------------------
+        getData(){
+          axios.get(this.apiUrl)
+          .then((res) =>{
+            this.apiData = res.data
+            // console.log(this.apiData);
+            this.pageNum()
+          })
+          .catch(err => console.log(err.response))
+        },
+        //計算總頁數
+        pageNum(){
+          this.totalPage = Math.ceil(this.apiData.length / 20)
+          for(let i =0; i<this.totalPage; i++){
+            let tempArr = this.apiData.slice(i*20,i*20+20)
+            this.prePageData.push(tempArr)
+          }
+        },
+        //上一頁
+        previousPage(){
+          if(this.currentPage ===1){
+            return
+          }else{
+            this.currentPage -= 1
+          }
+        },
+        //下一頁
+        nextPage(){
+          if(this.currentPage === this.totalPage){
+            return
+          }else{
+            this.currentPage += 1
+          }
+        },
+      },
+      created(){
+        this.getData()
+      },
+      computed: {
+        showData(){
+          return this.prePageData[this.currentPage-1]
+        }
+      }
     })
+    //元件------------------
+    app.component('pagination',{})
+    app.mount('#app')
   </script>
 </body>
 
