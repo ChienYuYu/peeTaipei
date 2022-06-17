@@ -21,11 +21,14 @@
       </div>
     </header>
     
-    <div class="row">
-      <div class="col-12 col-md-4 col-lg-3 bg-light" v-for="(item,index) in showData" :key="index">
-        <div class="card m-4">
+    <div class="row gx-0">
+      <div class="col col-12 col-md-4 col-lg-3 bg-light" v-for="(item,index) in showData" :key="index">
+        <div class="card my-3 mx-2">
           <div class="card-header bg-dark">
-            <p class="mb-0 text-white">【{{index+1}}】 公廁名稱 : <span class="text-warning">{{item.公廁名稱}}</span></p>
+            <p class="mb-0 text-white">
+              【{{currentPage}}-{{index+1}}】 公廁名稱 : 
+              <span class="text-warning">{{item.公廁名稱}}</span>
+            </p>
           </div>
           <div class="card-body">
             <h6 class="card-title">地址: {{item.公廁地址}}</h6>
@@ -48,7 +51,9 @@
         下一頁
       </button>
     </div>
-    <footer class="footer bg-dark text-secondary text-center py-3">PeeTaipei 關心您尿尿的地方<br><span class="fz-14">Copyright&copy2022 Chen ChienYu</span></footer>
+    <footer class="footer bg-dark text-secondary text-center py-3">
+      PeeTaipei 關心您尿尿的地方<br><span class="fz-14">Copyright&copy2022 Chen ChienYu</span>
+    </footer>
   </div>
   <!-- https://www.google.com.tw/maps/place/25%C2%B005'25.7%22N+121%C2%B030'22.2%22E -->
   <!-- https://www.google.com.tw/maps/place/25%C2%B005'25.7%22N+121%C2%B030'22.2%22E -->
