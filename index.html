@@ -27,11 +27,15 @@
   <div id="app">
     <header class="header">
       <nav class="navbar bg-dark bg-opacity-75 justify-content-center">
-        <h1 class="navbar-brand mb-0 text-white">PeeTaipei<span class="fs-6"> 台北尿尿網</span></h1>
+        <h1 class="navbar-brand mb-0 text-white">
+          <a href="index.html" class="text-decoration-none text-white">
+            PeeTaipei<span class="fs-6"> 台北尿尿網</span>
+          </a>
+        </h1>
       </nav>
       
       <div class="container h-75 d-flex  align-items-center">
-        <input class="form-control search-bar mx-auto w-75 bg-light text-dark shadow-lg" type="search" placeholder="請輸入區或路名尋找附近的廁所" aria-label="Search">
+        <input class="form-control search-bar mx-auto w-75 bg-light text-dark shadow-lg" type="search" placeholder="請輸入區或路名尋找附近的廁所" aria-label="Search" v-model="cacheInput">
       </div>
     </header>
     <div class="row gx-0">
@@ -59,7 +63,6 @@
   </div>
   <!-- https://www.google.com.tw/maps/place/25%C2%B005'25.7%22N+121%C2%B030'22.2%22E -->
   <!-- https://www.google.com.tw/maps/place/25%C2%B005'25.7%22N+121%C2%B030'22.2%22E -->
-  <!-- https://www.google.com.tw/maps/place/25%C2%B005'25.7%22N+121%C2%B030'22.2%22E -->
   <!-- https://www.google.com.tw/maps/place/25.090457N+121.506159E -->
   <!-- https://www.google.com.tw/maps/place/{{25.090457N}}+{{121.506159}} -->
   <script src="https://unpkg.com/vue@next"></script>
@@ -71,10 +74,14 @@
           // apiUrl:'https://quality.data.gov.tw/dq_download_json.php?nid=138798&md5_url=64e392a0fcb63fa9fb1f596bcb86e96b',
           apiUrl:'./64e392a0fcb63fa9fb1f596bcb86e96b_export.json',
           apiData:[],
-          test:123,
+          // test:123,
           totalPage:0,//總頁數
           prePageData:[],//每頁資料
           currentPage:1,//當前頁面
+          // -----------------
+          cacheInput:'',//搜尋欄輸入的資料放這邊
+          filterData:[],//搜尋篩選的資料放這邊
+
         }
       },
       methods: {
@@ -88,11 +95,12 @@
           })
           .catch(err => console.log(err.response))
         },
-        //計算總頁數
+        //計算總頁數 6/18 apiData 改 filterSearch
         pageNum(){
-          this.totalPage = Math.ceil(this.apiData.length / 20)
+          this.prePageData=[]//先清空
+          this.totalPage = Math.ceil(this.filterSearch.length / 20)
           for(let i =0; i<this.totalPage; i++){
-            let tempArr = this.apiData.slice(i*20,i*20+20)
+            let tempArr = this.filterSearch.slice(i*20,i*20+20)
             this.prePageData.push(tempArr)
           }
         },
@@ -112,13 +120,25 @@
             this.currentPage += 1
           }
         },
+        
       },
       created(){
         this.getData()
       },
       computed: {
+        filterSearch(){
+          return this.apiData.filter((item) =>{ 
+            return item.公廁地址.match(this.cacheInput)
+          })
+        },
         showData(){
           return this.prePageData[this.currentPage-1]
+        }
+      },
+      watch:{
+        filterSearch: function(){
+          this.pageNum()
+          console.log('嘿嘿');
         }
       }
     })
