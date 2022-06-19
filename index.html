@@ -40,7 +40,9 @@
     </header>
     <div class="row gx-0">
       <!-- ------------- -->
-      <card :item="item" :index="index" v-for="(item,index) in showData" :key="index" :current-page="currentPage"></card>
+      <card :item="item" :index="index" v-for="(item,index) in showData" :key="index" :current-page="currentPage"
+      @is-show="isShow"
+      ></card>
       <!-- ------------- -->
     </div>
     <!-- ------------------ -->
@@ -50,15 +52,7 @@
     @previous-page="previousPage"
     @next-page="nextPage"
     ></pagination>
-    <!-- <div class="pagination d-flex justify-content-center align-items-center my-4">
-      <button type="button" class="btn btn-outline-dark mx-2" @click="previousPage">
-        前一頁
-      </button>
-      <p class="mb-0">目前第{{currentPage}}頁 / 共{{totalPage}}頁</p>
-      <button type="button" class="btn btn-outline-dark mx-2" @click="nextPage">
-        下一頁
-      </button>
-    </div> -->
+
     <!-- ------------------- -->
     <footer class="footer bg-dark text-secondary text-center py-3">
       PeeTaipei 關心您尿尿的地方<br><span class="fz-14">Copyright&copy2022 Chen ChienYu</span>
@@ -80,6 +74,7 @@
           totalPage:0,//總頁數
           prePageData:[],//每頁資料
           currentPage:1,//當前頁面
+          isShow:false,//是否顯示地圖
           // -----------------
           cacheInput:'',//搜尋欄輸入的資料放這邊
           filterData:[],//搜尋篩選的資料放這邊
@@ -92,7 +87,6 @@
           axios.get(this.apiUrl)
           .then((res) =>{
             this.apiData = res.data
-            // console.log(this.apiData);
             this.pageNum()
           })
           .catch(err => console.log(err.response))
@@ -106,6 +100,7 @@
             this.prePageData.push(tempArr)
           }
         },
+        
         //上一頁
         previousPage(){
           if(this.currentPage ===1){
@@ -140,13 +135,17 @@
       watch:{
         filterSearch: function(){
           this.pageNum()
-          console.log('嘿嘿');
         }
       }
     })
     //元件------------------
     app.component('card',{
-      props:['item','index','currentPage'],
+      props:['item','index','currentPage',],
+      // methods:{
+      //   isShow(){
+      //     this.$emit('is-show')
+      //   }
+      // },
       template:
       `<div class="col col-12 col-md-4 bg-light">
         <div class="card my-3 mx-2">
@@ -158,7 +157,8 @@
           </div>
           <div class="card-body">
             <h6 class="card-title">地址: {{item.公廁地址}}</h6>
-            <a href="https://www.google.com.tw/maps/place/item.緯度+item.經度" class="btn btn-warning d-block">地圖開關</a>
+            <a href="#"
+             class="btn btn-secondary d-block">地圖開關</a>
           </div>
         </div>
       </div>`,
