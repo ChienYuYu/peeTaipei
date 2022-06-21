@@ -40,8 +40,13 @@
     </header>
     <div class="row gx-0">
       <!-- ------------- -->
-      <card :item="item" :index="index" v-for="(item,index) in showData" :key="index" :current-page="currentPage"
-      @is-show="isShow"
+      <card 
+      :item="item"
+      :index="index"
+      v-for="(item,index) in showData"
+      :key="index"
+      :current-page="currentPage"
+      @go-map="goMap(item.緯度,item.經度)"
       ></card>
       <!-- ------------- -->
     </div>
@@ -74,7 +79,6 @@
           totalPage:0,//總頁數
           prePageData:[],//每頁資料
           currentPage:1,//當前頁面
-          isShow:false,//是否顯示地圖
           // -----------------
           cacheInput:'',//搜尋欄輸入的資料放這邊
           filterData:[],//搜尋篩選的資料放這邊
@@ -99,6 +103,10 @@
             let tempArr = this.filterSearch.slice(i*20,i*20+20)
             this.prePageData.push(tempArr)
           }
+        },
+        goMap(w,j){
+          console.log(w,j);
+          window.location.href=`https://www.google.com.tw/maps/place/${w},${j}`
         },
         
         //上一頁
@@ -140,16 +148,16 @@
     })
     //元件------------------
     app.component('card',{
-      props:['item','index','currentPage',],
-      // methods:{
-      //   isShow(){
-      //     this.$emit('is-show')
-      //   }
-      // },
+      props:['item','index','currentPage'],
+      methods:{
+        goMap(){
+          this.$emit('go-map')
+        }
+      },
       template:
       `<div class="col col-12 col-md-4 bg-light">
         <div class="card my-3 mx-2">
-          <div class="card-header bg-dark">
+          <div class="card-header bg-secondary">
             <p class="mb-0 text-white">
               【{{currentPage}}-{{index+1}}】 公廁名稱 : 
               <span class="text-warning">{{item.公廁名稱}}</span>
@@ -157,8 +165,9 @@
           </div>
           <div class="card-body">
             <h6 class="card-title">地址: {{item.公廁地址}}</h6>
+            <p class="mb-0 text-danger d-inline-block pe-3 mb-2">經度: {{item.經度}} 緯度: {{item.緯度}}</p>
             <a href="#"
-             class="btn btn-secondary d-block">地圖開關</a>
+             class="btn btn-outline-dark" @click.prevent="goMap">地圖</a>
           </div>
         </div>
       </div>`,
@@ -187,5 +196,8 @@
     app.mount('#app')
   </script>
 </body>
-
+<!-- <input type="text" :value="item.緯度 +','+ item.經度"> -->
+<!-- <p class="mb-0 text-danger d-inline-block pe-3 mb-2">經度: {{item.經度}}</p>
+<p class="mb-0 text-danger d-inline-block pe-3 mb-2">緯度: {{item.緯度}}</p> -->
+<!-- https://www.google.com.tw/maps/place/{{item.緯度}}{{item.經度}} -->
 </html>
