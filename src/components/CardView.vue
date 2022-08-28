@@ -3,7 +3,7 @@
     <div class="card h-100">
       <div class="card-header bg-secondary">
         <p class="mb-0 text-white">
-          公廁名稱 :
+          {{currentPage+1}}-{{ index+1 }}公廁名稱 :
           <span class="text-warning"> {{ item.公廁名稱 }} </span>
         </p>
       </div>
@@ -23,7 +23,7 @@
 
 <script>
 export default {
-  props: ['item', 'index'],
+  props: ['item', 'index', 'currentPage'],
   data() {
     return {
     };

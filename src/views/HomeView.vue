@@ -5,15 +5,20 @@
     </h1>
 
     <div class="container search-bar-wrap">
-      <input class="form-control" type="search" placeholder="請輸入區或路名尋找附近的廁所" aria-label="Search">
+      <input class="form-control" type="search"
+      placeholder="請輸入區或路名尋找附近的廁所" aria-label="Search" v-model="inputValue">
     </div>
   </header>
   <div class="wrapper">
     <section class="container">
-      <Card v-for="(item, index) in showData" :key="index" :item="item" :index="index" />
-      <Pagination @previous-page="previousPage" @next-page="nextPage"
-      :totalPage="totalPage"
-      :currentPage="currentPage" />
+        <div class="row">
+          <Card v-for="(item, index) in showData" :key="index"
+          :item="item"
+          :index="index"
+          :currentPage="currentPage" />
+        </div>
+      <Pagination @previous-page="previousPage" @next-page="nextPage" :totalPage="totalPage"
+        :currentPage="currentPage" />
     </section>
     <footer class="footer bg-dark text-secondary text-center py-3 mt-auto">
       PeeTaipei 關心您尿尿的地方<br><span class="fz-14">Copyright &copy;2022 Chen ChienYu</span>
@@ -36,6 +41,7 @@ export default {
       eachPageData: [],
       totalPage: 0,
       currentPage: 0,
+      inputValue: '',
     };
   },
   methods: {
@@ -49,9 +55,10 @@ export default {
         });
     },
     pageNum() {
-      this.totalPage = Math.ceil(this.data.length / 10);
+      this.eachPageData = [];
+      this.totalPage = Math.ceil(this.filterData.length / 10);
       for (let i = 0; i < this.totalPage; i += 1) {
-        const tempArr = this.data.slice(i * 11, i * 11 + 11);
+        const tempArr = this.filterData.slice(i * 10, i * 10 + 10);
         this.eachPageData.push(tempArr);
       }
       console.log('eachPageData', this.eachPageData);
@@ -73,6 +80,15 @@ export default {
   computed: {
     showData() {
       return this.eachPageData[this.currentPage];
+    },
+    filterData() {
+      return this.data.filter((item) => item.公廁地址.match(this.inputValue));
+    },
+  },
+  watch: {
+    filterData() {
+      this.currentPage = 0;
+      this.pageNum();
     },
   },
 };
@@ -97,6 +113,8 @@ export default {
 
   .search-bar-wrap {
     position: absolute;
+    right: 0;
+    left: 0;
     bottom: 35%;
     transform: translateY(50%);
     // border: 1px solid #f00;
