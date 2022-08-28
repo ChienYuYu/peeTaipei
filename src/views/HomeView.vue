@@ -21,7 +21,7 @@
       PeeTaipei 關心您尿尿的地方<br><span class="fz-14">Copyright &copy;2022 Chen ChienYu</span>
     </footer>
   </div>
-  <a href="#" class="btn btn-warning text-white gotop" ref="gotop">▲</a>
+  <a href="#" class="btn btn-warning text-white d-none gotop" ref="gotop">▲</a>
 </template>
 
 <script>
