@@ -21,6 +21,7 @@
       PeeTaipei 關心您尿尿的地方<br><span class="fz-14">Copyright &copy;2022 Chen ChienYu</span>
     </footer>
   </div>
+  <a href="#" class="btn btn-warning text-white gotop" ref="gotop">▲</a>
 </template>
 
 <script>
@@ -71,6 +72,15 @@ export default {
   },
   created() {
     this.getData();
+  },
+  mounted() {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 500) {
+        this.$refs.gotop.classList.remove('d-none');
+      } else {
+        this.$refs.gotop.classList.add('d-none');
+      }
+    });
   },
   computed: {
     showData() {
@@ -125,5 +135,13 @@ export default {
   height: calc(100vh - 260px);
   display: flex;
   flex-direction: column;
+}
+
+.gotop{
+  position: fixed;
+  bottom: 0;
+  z-index: 20;
+  right: 0;
+  margin: 0 .5rem .5rem 0 ;
 }
 </style>
