@@ -3,20 +3,17 @@
     <h1 class="text-center text-white bg-dark bg-opacity-50 py-3">
       PeeTaipei 台北尿尿網
     </h1>
-
     <div class="container search-bar-wrap">
-      <input class="form-control" type="search"
-      placeholder="請輸入區或路名尋找附近的廁所" aria-label="Search" v-model="inputValue">
+      <input class="form-control" type="search" placeholder="請輸入區或路名尋找附近的廁所"
+      aria-label="Search" v-model="inputValue">
     </div>
   </header>
   <div class="wrapper">
     <section class="container">
-        <div class="row">
-          <Card v-for="(item, index) in showData" :key="index"
-          :item="item"
-          :index="index"
-          :currentPage="currentPage" />
-        </div>
+      <div class="row">
+        <Card v-for="(item, index) in showData" :key="index"
+        :item="item" :index="index" :currentPage="currentPage" />
+      </div>
       <Pagination @previous-page="previousPage" @next-page="nextPage" :totalPage="totalPage"
         :currentPage="currentPage" />
     </section>
@@ -50,7 +47,6 @@ export default {
       this.axios.get(url)
         .then((res) => {
           this.data = res.data;
-          console.log(this.data);
           this.pageNum();
         });
     },
@@ -61,7 +57,6 @@ export default {
         const tempArr = this.filterData.slice(i * 10, i * 10 + 10);
         this.eachPageData.push(tempArr);
       }
-      console.log('eachPageData', this.eachPageData);
     },
     previousPage() {
       if (this.currentPage !== 0) {
@@ -117,7 +112,6 @@ export default {
     left: 0;
     bottom: 35%;
     transform: translateY(50%);
-    // border: 1px solid #f00;
     display: flex;
     justify-content: center;
 
@@ -129,7 +123,6 @@ export default {
 
 .wrapper {
   height: calc(100vh - 260px);
-  // border: 1px solid #f00;
   display: flex;
   flex-direction: column;
 }
