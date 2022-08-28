@@ -10,9 +10,10 @@
   </header>
   <div class="wrapper">
     <section class="container">
-      <CardView
-      :data = data>
-      </CardView>
+      <Card v-for="(item, index) in showData" :key="index" :item="item" :index="index" />
+      <Pagination @previous-page="previousPage" @next-page="nextPage"
+      :totalPage="totalPage"
+      :currentPage="currentPage" />
     </section>
     <footer class="footer bg-dark text-secondary text-center py-3 mt-auto">
       PeeTaipei 關心您尿尿的地方<br><span class="fz-14">Copyright &copy;2022 Chen ChienYu</span>
@@ -21,15 +22,20 @@
 </template>
 
 <script>
-import CardView from '../components/CardView.vue';
+import Card from '../components/CardView.vue';
+import Pagination from '../components/PaginationView.vue';
 
 export default {
   components: {
-    CardView,
+    Card,
+    Pagination,
   },
   data() {
     return {
       data: [],
+      eachPageData: [],
+      totalPage: 0,
+      currentPage: 0,
     };
   },
   methods: {
@@ -39,11 +45,35 @@ export default {
         .then((res) => {
           this.data = res.data;
           console.log(this.data);
+          this.pageNum();
         });
+    },
+    pageNum() {
+      this.totalPage = Math.ceil(this.data.length / 10);
+      for (let i = 0; i < this.totalPage; i += 1) {
+        const tempArr = this.data.slice(i * 11, i * 11 + 11);
+        this.eachPageData.push(tempArr);
+      }
+      console.log('eachPageData', this.eachPageData);
+    },
+    previousPage() {
+      if (this.currentPage !== 0) {
+        this.currentPage -= 1;
+      }
+    },
+    nextPage() {
+      if (this.currentPage !== this.eachPageData.length) {
+        this.currentPage += 1;
+      }
     },
   },
   created() {
     this.getData();
+  },
+  computed: {
+    showData() {
+      return this.eachPageData[this.currentPage];
+    },
   },
 };
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="col col-12 col-md-6 col-lg-4 my-2" v-for="(item, index) in data" :key="index">
+  <div class="col col-12 col-md-6 col-lg-4 my-2">
     <div class="card h-100">
       <div class="card-header bg-secondary">
         <p class="mb-0 text-white">
@@ -23,7 +23,7 @@
 
 <script>
 export default {
-  props: ['data'],
+  props: ['item', 'index'],
   data() {
     return {
     };
