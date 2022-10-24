@@ -44,12 +44,11 @@ export default {
   },
   methods: {
     getData() {
-      // const url = 'data/64e392a0fcb63fa9fb1f596bcb86e96b_export.json'; // 本地json檔
-      // const url = 'http://localhost:8080/toilet/dq_download_json.php?nid=138798&md5_url=64e392a0fcb63fa9fb1f596bcb86e96b'; // localhost
-      const url = 'https://chienyuyu.github.io/peeTaipei/toilet/dq_download_json.php?nid=138798&md5_url=64e392a0fcb63fa9fb1f596bcb86e96b';
+      const url = 'data/64e392a0fcb63fa9fb1f596bcb86e96b_export.json'; // 本地json檔
+      // const url = 'http://localhost:8080/toilet/dq_download_json.php?nid=138798&md5_url=64e392a0fcb63fa9fb1f596bcb86e96b'; // 配置代理
       this.axios.get(url)
         .then((res) => {
-          // console.log(res.data);
+          console.log(res.data);
           this.data = res.data;
           this.pageNum();
         });
