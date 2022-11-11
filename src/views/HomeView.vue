@@ -1,20 +1,18 @@
 <template>
-  <HeaderSearch></HeaderSearch>
+  <HeaderSearch />
   <div class="wrapper">
     <section class="container">
-      <div class="row">
-        <Card v-for="(item, index) in showData" :key="index"
-        :item="item" :index="index" :currentPage="currentPage" />
-      </div>
-      <Pagination @previous-page="previousPage" @next-page="nextPage" :totalPage="totalPage"
-        :currentPage="currentPage" />
+      <Card />
+      <Pagination />
     </section>
     <Footer />
   </div>
-  <a href="#" class="btn btn-warning text-white d-none gotop" ref="gotop">▲</a>
+  <a href="#" class="btn btn-warning text-white gotop" v-show="showBtn">▲</a>
 </template>
 
 <script>
+import { ref, onMounted } from 'vue';
+import { useStore } from 'vuex';
 import HeaderSearch from '../components/headerSearch.vue';
 import Card from '../components/CardView.vue';
 import Pagination from '../components/PaginationView.vue';
@@ -27,103 +25,28 @@ export default {
     Pagination,
     Footer,
   },
-  data() {
-    return {
-      data: [],
-      eachPageData: [],
-      totalPage: 0,
-      currentPage: 0,
-    };
-  },
-  methods: {
-    getData() {
-      const url = 'data/64e392a0fcb63fa9fb1f596bcb86e96b_export.json'; // 本地json檔
-      this.axios.get(url)
-        .then((res) => {
-          console.log(res.data);
-          this.data = res.data;
-          this.pageNum();
-        });
-    },
-    pageNum() {
-      this.eachPageData = [];
-      this.totalPage = Math.ceil(this.filterData.length / 10);
-      for (let i = 0; i < this.totalPage; i += 1) {
-        const tempArr = this.filterData.slice(i * 10, i * 10 + 10);
-        this.eachPageData.push(tempArr);
-      }
-    },
-    previousPage() {
-      if (this.currentPage !== 0) {
-        this.currentPage -= 1;
-      }
-    },
-    nextPage() {
-      if (this.currentPage !== this.eachPageData.length) {
-        this.currentPage += 1;
-      }
-    },
-  },
-  created() {
-    this.getData();
-  },
-  mounted() {
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 500) {
-        this.$refs.gotop.classList.remove('d-none');
-      } else {
-        this.$refs.gotop.classList.add('d-none');
-      }
+  setup() {
+    const store = useStore();
+    const showBtn = ref(false);
+    store.dispatch('getApi');
+
+    onMounted(() => {
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 500) {
+          showBtn.value = true;
+        } else {
+          showBtn.value = false;
+        }
+      });
     });
-  },
-  computed: {
-    showData() {
-      return this.eachPageData[this.currentPage];
-    },
-    filterData() {
-      return this.data.filter((item) => item.公廁地址.match(this.inputValue));
-    },
-  },
-  watch: {
-    filterData() {
-      this.currentPage = 0;
-      this.pageNum();
-    },
+
+    return { showBtn };
   },
 };
-
 </script>
 
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400&display=swap');
-
-// .header {
-//   position: relative;
-//   height: 260px;
-//   background-image: url('../assets/img/pexels-cottonbro-4114710.jpg');
-//   background-position: 50% 33%;
-//   background-size: cover;
-
-//   h1 {
-//     font-family: 'Noto Sans TC', sans-serif;
-//     font-size: 16px;
-//     letter-spacing: .1rem;
-//   }
-
-//   .search-bar-wrap {
-//     position: absolute;
-//     right: 0;
-//     left: 0;
-//     bottom: 35%;
-//     transform: translateY(50%);
-//     display: flex;
-//     justify-content: center;
-
-//     input {
-//       width: 75%;
-//     }
-//   }
-// }
 
 .wrapper {
   height: calc(100vh - 260px);
@@ -131,11 +54,11 @@ export default {
   flex-direction: column;
 }
 
-.gotop{
+.gotop {
   position: fixed;
   bottom: 0;
   z-index: 20;
   right: 0;
-  margin: 0 .5rem .5rem 0 ;
+  margin: 0 .5rem .5rem 0;
 }
 </style>
