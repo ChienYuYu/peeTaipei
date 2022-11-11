@@ -30,12 +30,13 @@ export default createStore({
     //   }
     // },
     countPage(state) { // 02
-      state.eachPageData = [];
+      state.eachPageData = []; // 先清空 不然會一直累積
       state.totalPageNum = Math.ceil(this.getters.filterData.length / 30);
       for (let i = 0; i < state.totalPageNum; i += 1) {
         const tempArr = this.getters.filterData.slice(i * 30, i * 30 + 30);
         state.eachPageData.push(tempArr);
       }
+      state.currentPageNum = 0; // 當前頁面跳回第一頁
     },
     switchPage(state, pn) {
       if (pn === 'previous' && state.currentPageNum !== 0) {
